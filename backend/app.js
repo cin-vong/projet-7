@@ -1,22 +1,10 @@
 const express = require('express');
-const mysql = require('mysql');
+
 const bodyParser = require('body-parser');
 const helmet = require("helmet");
  
 const app = express();
-
-
-const con = mysql.createConnection({
-  host: "localhost",
-  user: "yourusername",
-  password: "yourpassword"
-});
-
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
- 
+const cors = require('cors');
 const userRoutes = require('./routes/user.js');
 const postRoutes = require('./routes/post.js');
 const path = require('path');
