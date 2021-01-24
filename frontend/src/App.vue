@@ -1,14 +1,21 @@
 <template>
-  <div id="app">
+<body id= "back-color">
+  <div id="app" >
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
   </div>
+  </body>
 </template>
 
 <style>
+
+#back-color{
+background-color:#bebeba;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -27,6 +34,6 @@
 }
 
 #nav a.router-link-exact-active {
-  color: rgba(248, 54, 54, 0.836);
+  color: #0e213f;
 }
 </style>

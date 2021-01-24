@@ -83,7 +83,7 @@ export default {
     }
 
     .active{
-        color: rgba(248, 54, 54, 0.836);
+        color: #0e213f;
         font-weight: bold;
     }
 

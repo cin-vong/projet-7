@@ -79,6 +79,10 @@ export default {
 </script>
 
 <style scoped>
+    .background-color{
+        color: #bebeba;
+    }
+
     .signup{
         max-width: 500px;
         margin: 90px auto;
@@ -94,7 +98,7 @@ export default {
     }
 
     .active{
-        color: rgb(255, 2, 2);
+        color: #0e213f;
         font-weight: bold;
     }
 
@@ -123,7 +127,7 @@ export default {
         padding: 10px;
         font-size: 1.1rem;
         color: white;
-        background-color: rgb(43, 42, 42);
+        background-color: rgb(83, 80, 80);
         border: none;
         border-radius: 10px;
         transition-duration: 0.2s;
