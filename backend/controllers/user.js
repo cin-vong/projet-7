@@ -79,7 +79,7 @@ exports.login = (req, res, next) => {
         }
     );
 };
-// Delete User
+// Effacer l'utilisateur
 exports.deleteUser = (req, res, next) => {
     db.query(`DELETE FROM users WHERE users.id = ${req.params.id}`, (error, result, field) => {
         if (error) {

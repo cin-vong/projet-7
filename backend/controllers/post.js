@@ -1,4 +1,4 @@
-// All post
+// Tous les publications
 exports.getAllPost = (req, res, next) => {
     db.query('SELECT users.nom, users.prenom, posts.id, posts.userId, posts.title, posts.content, posts.date AS date FROM users INNER JOIN posts ON users.id = posts.userId ORDER BY date DESC', (error, result, field) => {
         if (error) {
@@ -9,7 +9,7 @@ exports.getAllPost = (req, res, next) => {
         return res.status(200).json(result);
     });
 };
-// NewPost
+// Nouveau publication
 exports.newPost = (req, res, next) => {
     db.query(`INSERT INTO posts VALUES (NULL, '${req.body.userId}', '${req.body.title}', NOW(), '${req.body.content}')`, (error, result, field) => {
         if (error) {
@@ -22,7 +22,7 @@ exports.newPost = (req, res, next) => {
         })
     });
 };
-// OnePost
+// Une publication
 exports.getOnePost = (req, res, next) => {
     db.query(`SELECT * FROM posts WHERE posts.id = ${req.params.id}`, (error, result, field) => {
         if (error) {
@@ -33,7 +33,7 @@ exports.getOnePost = (req, res, next) => {
         return res.status(200).json(result);
     });
 };
-// Delete OnePost
+// Effacer une publication
 exports.deleteOnePost = (req, res, next) => {
     db.query(`DELETE FROM posts WHERE posts.id = ${req.params.id}`, (error, result, field) => {
         if (error) {
@@ -44,7 +44,7 @@ exports.deleteOnePost = (req, res, next) => {
         return res.status(200).json(result);
     });
 };
-// Modify OnePost
+// Modifier une publication
 exports.modifyOnePost = (req, res, next) => {
     db.query(`UPDATE posts SET title = '${req.body.title}', content = '${req.body.content}' WHERE posts.id = ${req.params.id}`, (error, result, field) => {
         if (error) {
@@ -66,7 +66,7 @@ exports.getUserPosts = (req, res, next) => {
         return res.status(200).json(result);
     });
 };
-// New comment
+// Nouveau commentaire
 exports.newComment = (req, res, next) => {
     db.query(`INSERT INTO comments VALUES (NULL, ${req.body.userId}, ${req.params.id}, NOW(), '${req.body.content}')`, (error, result, field) => {
         if (error) {
@@ -77,7 +77,7 @@ exports.newComment = (req, res, next) => {
         return res.status(200).json(result);
     });
 };
-// Get all comments
+// Tous les commentaires
 exports.getAllComments = (req, res, next) => {
     db.query(`SELECT users.id, users.nom, users.prenom, comments.id,comments.content, comments.userId, comments.date FROM users INNER JOIN comments ON users.id = comments.userId WHERE comments.postId = ${req.params.id} ORDER BY comments.date DESC`,
         (error, result, field) => {
@@ -89,7 +89,7 @@ exports.getAllComments = (req, res, next) => {
             return res.status(200).json(result);
         });
 };
-//Delete comment
+// Effacer un commentaire
 exports.deleteComment = (req, res, next) => {
     db.query(`DELETE FROM comments WHERE comments.id = ${req.params.id}`, (error, result, field) => {
         if (error) {
