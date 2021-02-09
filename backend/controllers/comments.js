@@ -5,6 +5,7 @@ exports.newComment = (req, res, next) => {
            con.query("SELECT * FROM comments", function (err, result, fields) {
          if (err) throw err;
              console.log(result);
+             return res.status(201).json({ result })
              });
         });
     };
@@ -28,6 +29,7 @@ exports.deleteComment = (req, res, next) => {
         con.query(sql, function (err, result) {
           if (err) throw err;
           console.log("Number of comment deleted: " + result.affectedRows);
+          return res.status(201).json({ result })
         });
       });
     };

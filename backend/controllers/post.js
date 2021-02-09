@@ -46,7 +46,7 @@ exports.deleteOnePost = (req, res, next) => {
 // Modify OnePost
 exports.modifyOnePost = (req, res, next) => {
     if (err) throw err;
-  var sql = "UPDATE post SET name WHERE firstname";
+  const sql = "UPDATE post SET name WHERE firstname";
   con.query(sql, function (err, result) {
     if (err) throw err;
     console.log(result.affectedRows + " record(s) updated");
