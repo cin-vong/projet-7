@@ -9,6 +9,7 @@ const connection = require('./mysql/connexion');
 
 const userRoutes = require('./routes/user.js');
 const postRoutes = require('./routes/post.js');
+const commentsRoutes = require('./routes/comments.js');
 
 //Connexion DB
 
@@ -42,6 +43,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api/comments', commentsRoutes);
 
 
 module.exports = app;

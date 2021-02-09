@@ -1,102 +1,56 @@
-// Tous les publications
+// All post
 exports.getAllPost = (req, res, next) => {
-    db.query('SELECT users.nom, users.prenom, posts.id, posts.userId, posts.title, posts.content, posts.date AS date FROM users INNER JOIN posts ON users.id = posts.userId ORDER BY date DESC', (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Nouveau publication
-exports.newPost = (req, res, next) => {
-    db.query(`INSERT INTO posts VALUES (NULL, '${req.body.userId}', '${req.body.title}', NOW(), '${req.body.content}')`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(201).json({
-            message: 'Votre post à été publié !'
-        })
-    });
-};
-// Une publication
-exports.getOnePost = (req, res, next) => {
-    db.query(`SELECT * FROM posts WHERE posts.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Effacer une publication
-exports.deleteOnePost = (req, res, next) => {
-    db.query(`DELETE FROM posts WHERE posts.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Modifier une publication
-exports.modifyOnePost = (req, res, next) => {
-    db.query(`UPDATE posts SET title = '${req.body.title}', content = '${req.body.content}' WHERE posts.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Get User's Posts
-exports.getUserPosts = (req, res, next) => {
-    db.query(`SELECT * FROM posts WHERE posts.userId = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Nouveau commentaire
-exports.newComment = (req, res, next) => {
-    db.query(`INSERT INTO comments VALUES (NULL, ${req.body.userId}, ${req.params.id}, NOW(), '${req.body.content}')`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
-// Tous les commentaires
-exports.getAllComments = (req, res, next) => {
-    db.query(`SELECT users.id, users.nom, users.prenom, comments.id,comments.content, comments.userId, comments.date FROM users INNER JOIN comments ON users.id = comments.userId WHERE comments.postId = ${req.params.id} ORDER BY comments.date DESC`,
-        (error, result, field) => {
-            if (error) {
-                return res.status(400).json({
-                    error
-                });
-            }
-            return res.status(200).json(result);
+    con.connect(function(err) {
+        if (err) throw err;
+           con.query("SELECT * FROM post", function (err, result, fields) {
+         if (err) throw err;
+             console.log(result);
+             return res.status(201).json({ result })
+             });
         });
-};
-// Effacer un commentaire
-exports.deleteComment = (req, res, next) => {
-    db.query(`DELETE FROM comments WHERE comments.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(result);
-    });
-};
+    }
+
+// NewPost
+exports.newPost = (req, res, next) => {
+    con.connect(function(err) {
+        if (err) throw err;
+           con.query("SELECT * FROM post", function (err, result, fields) {
+         if (err) throw err;
+         return res.status(201).json({ result })
+             });
+        });
+    }
+// OnePost
+exports.getOnePost = (req, res, next) => {
+    con.connect(function(err) {
+        if (err) throw err;
+           con.query("SELECT * FROM post", function (err, result, fields) {
+         if (err) throw err;
+             console.log(result);
+             return res.status(201).json({ result })
+             });
+        });
+    }
+// Delete OnePost
+exports.deleteOnePost = (req, res, next) => {
+    con.connect(function(err) {
+        if (err) throw err;
+        const sql = "DELETE FROM post WHERE author'";
+        con.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log("Number of post deleted: " + result.affectedRows);
+          return res.status(201).json({ result })
+        });
+      });
+    }
+// Modify OnePost
+exports.modifyOnePost = (req, res, next) => {
+    if (err) throw err;
+  var sql = "UPDATE post SET name WHERE firstname";
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log(result.affectedRows + " record(s) updated");
+    return res.status(201).json({ result })
+  });
+}
+

@@ -2,91 +2,71 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 //Inscription
-exports.signup = (req, res, next) => {
-    //Cryptage Email
-    const buffer = Buffer.from(req.body.email);
-    const cryptedEmail = buffer.toString('base64');
-    //Verification email disponible
-    db.query(`SELECT * FROM users WHERE email='${cryptedEmail}'`,
-            (err, results, rows) => {
-                //Si email deja utilisé
-                if (results.length > 0) {
-                    res.status(401).json({
-                        message: 'Email non disponible.'
-                    });
-                    //Si email disponible
-                } else {
-                //Cryptage du MDP
-                bcrypt.hash(req.body.password, 10)
-                .then(cryptedPassword => {
-                    //Ajout à la BDD
-                    db.query(`INSERT INTO users VALUES (NULL, '${req.body.nom}', '${req.body.prenom}', '${cryptedPassword}', '${cryptedEmail}', 0)`,
-                        (err, results, fields) => {
-                            if (err) {
-                                console.log(err);
-                                return res.status(400).json("erreur");
-                            }
-                            return res.status(201).json({
-                                message: 'Votre compte a bien été crée !'
-                            });
-                        }
-                    );
-                })
-                .catch(error => res.status(500).json({
-                    error
-                }));
-            }
-            });
-};
-
+      exports.signup = (req, res, next) => {
+        const user = req.body
+          bcrypt.hash(user.password, 10)
+            .then((hash) => {
+            user.password = hash;
+          connection.query('SELECT * FROM user Where email=?', user.email, function (err, result) {
+             if (err){
+                console.log(err)
+              return res.status(400).json("Error !")
+          }
+                if(result.lenght >= 1){
+                  return res.status(400).json({ message: "Adresse déjà utilisé !" })
+      }else{
+                connection.query('INSERT INTO user SET ?', user, (err, result))
+                if (err) {
+                console.log(err)
+                  return res.status(400).json("Error !")
+          }
+                return res.status(201).json ({ message: " Compte bien crée !"});
+          }
+      });
+   });
+}
+    
 //Connexion
 exports.login = (req, res, next) => {
-    const buffer = Buffer.from(req.body.email);
-    const cryptedEmail = buffer.toString('base64');
-    //Recherche de l'utilisateur dans la BDD
-    db.query(`SELECT * FROM users WHERE email='${cryptedEmail}'`,
-        (err, results, rows) => {
-            //Si utilisateur trouvé : 
-            if (results.length > 0) {
-                //Verification du MDP
-                bcrypt.compare(req.body.password, results[0].password)
-                    .then(valid => {
-                        //Si MDP invalide erreur
-                        if (!valid) {
-                            res.status(401).json({
-                                message: 'Mot de passe incorrect.'
-                            });
-                            //Si MDP valide création d'un token
-                        } else {
-                            res.status(200).json({
-                                userId: results[0].id,
-                                nom: results[0].nom,
-                                prenom: results[0].prenom,
-                                admin: results[0].admin,
-                                token: jwt.sign({
-                                    userId: results[0].id
-                                }, process.env.TOKEN, {
-                                    expiresIn: '24h'
-                                })
-                            });
-                        }
-                    });
-            } else {
-                res.status(404).json({
-                    message: 'Utilisateur inconnu.'
-                });
+    const user = req.body
+    if (user.email && user.password){
+      connection.query('SELECT * FROM user Where email = ?', user.email, function (err, result){
+        if (err) {
+          console.log(err)
+          return res.status(400).json("Error !")
+        }
+        if (result.lenght <= 0){
+          return res.status(400).json({ message: "Email inconnu"})
+        }else{
+          bcrypt.compare(user.password, results[0].password)
+          .then(valid => {
+            if (!valid) {
+              return res.status(401).json({ error: 'Mot de passe incorrect !' });
             }
-        }
-    );
-};
-// Effacer l'utilisateur
-exports.deleteUser = (req, res, next) => {
-    db.query(`DELETE FROM users WHERE users.id = ${req.params.id}`, (error, result, field) => {
-        if (error) {
-            return res.status(400).json({
-                error
+            res.status(200).json({
+              userId: user._id,
+              token: jwt.sign(
+                { userId: user._id },
+                'RANDOM_TOKEN_SECRET',
+                { expiresIn: '24h' }
+              )
             });
+          })
+          .catch(error => res.status(500).json({ error }));
         }
-        return res.status(200).json(result);
+      })
+    }
+  }
+
+
+// Delete User
+exports.deleteUser = (req, res, next) => {
+  connection.query('SELECT * FROM user Where email=?', user.email, function (err, result) {
+      if (err) throw err;
+      console.log("Compte effacé avec succés ! " + result.affectedRows);
     });
-};
+    if (result.lenght <= 0){
+      return res.status(400).json({ message: "Compte déjà effacé"})
+  }
+}
+    

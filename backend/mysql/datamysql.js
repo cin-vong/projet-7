@@ -6,7 +6,7 @@ const db = mysql.createConnection({
     host: "localhost",
     user: "nom_utilisateur",
     password: "mot_de_passe_utilisateur",
-    database: "mydb"
+    database: "groupomania"
  
   });
 
